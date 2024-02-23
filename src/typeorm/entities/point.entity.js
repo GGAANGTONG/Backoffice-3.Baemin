@@ -21,8 +21,7 @@ export const Point = new EntitySchema({
     },
     updatedAt: {
       type: 'datetime',
-      default: () => 'CURRENT_TIMESTAMP',
-      onUpdate: () => 'CURRENT_TIMESTAMP',
+      default: () => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
     },
   },
   relations: {

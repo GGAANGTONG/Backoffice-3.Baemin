@@ -1,5 +1,11 @@
 import { EntitySchema } from 'typeorm';
 
+const role = {
+  user: '회원',
+  owner: '식당 주인',
+  admin: '관리자',
+};
+
 export const Users = new EntitySchema({
   name: 'users',
   tableName: 'users',
@@ -31,6 +37,8 @@ export const Users = new EntitySchema({
     },
     role: {
       type: 'enum',
+      enum: role,
+      default: role.user,
     },
     address: {
       type: 'varchar',
@@ -41,8 +49,7 @@ export const Users = new EntitySchema({
     },
     updatedAt: {
       type: 'datetime',
-      default: () => 'CURRENT_TIMESTAMP',
-      onUpdate: () => 'CURRENT_TIMESTAMP',
+      default: () => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
     },
     point: {
       type: 'bigint',
