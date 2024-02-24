@@ -27,6 +27,7 @@ export const Restaurant = new EntitySchema({
     },
     rating: {
       type: 'tinyint',
+      nullable: true,
     },
   },
 });
