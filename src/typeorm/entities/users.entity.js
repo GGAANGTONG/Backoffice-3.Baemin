@@ -17,6 +17,7 @@ export const Users = new EntitySchema({
     },
     email: {
       type: 'varchar',
+      unique: true,
     },
     kakao: {
       type: 'varchar',
@@ -29,8 +30,9 @@ export const Users = new EntitySchema({
     name: {
       type: 'varchar',
     },
-    auth: {
+    verify: {
       type: 'boolean',
+      default: false,
     },
     grade: {
       type: 'varchar',
