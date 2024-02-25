@@ -13,7 +13,7 @@ class OrdersService {
     return await OrdersRepository.updateOrder(orderId, status);
   };
 
-  updateOrder = async (orderId, userId) => {
+  completeOrder = async (orderId, userId) => {
     return await OrdersRepository.completeOrder(orderId, userId);
   };
 }

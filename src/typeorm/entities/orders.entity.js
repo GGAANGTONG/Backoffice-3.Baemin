@@ -29,6 +29,9 @@ export const Orders = new EntitySchema({
     address: {
       type: 'varchar',
     },
+    totalPrice: {
+      type: 'int',
+    },
   },
   relations: {
     users: {
