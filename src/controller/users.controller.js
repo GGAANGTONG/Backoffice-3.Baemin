@@ -4,11 +4,11 @@ class UsersController {
     signUp = async (req, res, next) => {
         // ORM인 Prisma에서 Posts 모델의 create 메서드를 사용해 데이터를 요청합니다.
         try {
-            const { email, clientId, password, passwordCheck, name, role, address } = req.body;
+            const { email, kakao, password, passwordCheck, name, role, address } = req.body;
             if (role && !['회원', '식당 주인', '관리자'].includes(role)) {
                 return res.status(400).json({ success: false, message: '역할이 잘못되었습니다.' })
             }
-            if (!clientId) {
+            if (!kakao) {
                 if (!email || !password || !passwordCheck) {
                     return res.status(400).json({ success: false, message: '필수값이 누락되었습니다.' })
                 }
@@ -25,7 +25,7 @@ class UsersController {
 
             await usersService.signUp(
                 email,
-                clientId,
+                kakao,
                 password,
                 name,
                 role,
@@ -43,8 +43,8 @@ class UsersController {
 
     signIn = async (req, res) => {
         try {
-            const { email, clientId, password } = req.body;
-            const token = await usersService.signIn({ email, clientId, password })
+            const { email, kakao, password } = req.body;
+            const token = await usersService.signIn({ email, kakao, password })
             return res.json(token);
         } catch (err) {
             return res.status(err.code).json(err)

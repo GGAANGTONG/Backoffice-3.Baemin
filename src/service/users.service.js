@@ -8,9 +8,9 @@ dotenv.config();
 class UsersService {
 
     signUp = async (data) => {
-        const { email, clientId, password, name, role, address } = data;
-        if (clientId) {
-            const isExist = await usersRepository.findUserByEmail(clientId)
+        const { email, kakao, password, name, role, address } = data;
+        if (kakao) {
+            const isExist = await usersRepository.findUserByEmail(kakao)
             if (isExist) {
                 throw {
                     code: 400,
@@ -19,8 +19,8 @@ class UsersService {
             }
 
             await usersRepository.createUser({
-                email: clientId,
-                clientId,
+                email: kakao,
+                kakao,
                 name,
                 grade,
             })
@@ -44,9 +44,9 @@ class UsersService {
         }
     }
 
-    signIn = async ({ clientId, email, password }) => {
-        if (clientId) {
-            let user = await usersRepository.findUserByEmail(clientId)
+    signIn = async ({ kakao, email, password }) => {
+        if (kakao) {
+            let user = await usersRepository.findUserByEmail(kakao)
             if (!user) {
                 throw {
                     code: 401,
