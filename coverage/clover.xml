@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1708927172110" clover="3.2.0">
+  <project timestamp="1708927172110" name="All files">
+    <metrics statements="18" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="2" elements="24" coveredelements="11" complexity="0" loc="18" ncloc="18" packages="1" files="1" classes="1"/>
+    <file name="restaurant.repository.js" path="C:\Users\3050ti\Desktop\Coding-Camp\8th.Assignment\src\repositories\restaurant.repository.js">
+      <metrics statements="18" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="2"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="8" count="2" type="stmt"/>
+      <line num="16" count="2" type="stmt"/>
+      <line num="18" count="2" type="stmt"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="25" count="0" type="stmt"/>
+      <line num="36" count="0" type="stmt"/>
+      <line num="38" count="1" type="stmt"/>
+      <line num="39" count="0" type="stmt"/>
+      <line num="55" count="0" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="59" count="0" type="stmt"/>
+      <line num="62" count="0" type="stmt"/>
+      <line num="73" count="0" type="stmt"/>
+      <line num="78" count="1" type="stmt"/>
+      <line num="79" count="0" type="stmt"/>
+      <line num="85" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

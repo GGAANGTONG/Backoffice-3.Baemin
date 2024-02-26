@@ -29,7 +29,7 @@ export const Menu = new EntitySchema({
   relations: {
     restaurant: {
       target: 'restaurant',
-      type: 'many-to-many',
+      type: 'many-to-one',
       joinTable: true,
       //왜래키 설정(얘를 안쓰면 users + userId로 붙음 = usersuserId)
       joinColumn: { name: 'storeId' },

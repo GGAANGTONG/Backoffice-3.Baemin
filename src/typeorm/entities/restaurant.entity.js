@@ -31,3 +31,5 @@ export const Restaurant = new EntitySchema({
     },
   },
 });
+
+//생각해보니 얘 왜 users랑 연결이 안돼있지?

@@ -19,13 +19,12 @@ const dataSource = new DataSource({
   //database 동기화 명령(npx prisma db push랑 같음, 매우 위험)
   synchronize: false,
   entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
-  migrations: ['src/typeorm/migrations/*.js'],
+  migrations: ['src/typeorm/migrations/1708928010248-Users.js'],
   cli: {
     entitiesDir: 'src/typeorm/entities',
     migrationsDir: 'src/typeorm/migrations',
   },
   logging: true,
 });
-// await dataSource.initialize();
 
 export { dataSource };

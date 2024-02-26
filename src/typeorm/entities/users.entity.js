@@ -17,6 +17,7 @@ export const Users = new EntitySchema({
     },
     email: {
       type: 'varchar',
+      unique: true,
     },
     kakao: {
       type: 'varchar',
