@@ -1,4 +1,5 @@
-import usersService from "../service/users.service";
+import { Code } from "typeorm";
+import usersService from "../service/users.service.js";
 
 class UsersController {
     signUp = async (req, res, next) => {
@@ -12,6 +13,11 @@ class UsersController {
                 if (!email || !password || !passwordCheck) {
                     return res.status(400).json({ success: false, message: '필수값이 누락되었습니다.' })
                 }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email && !emailRegex.test(email)) {
+                    return res.status(400).json({ success: false, message: '이메일 형식에 맞지 않습니다.' });
+                }
+
                 if (password !== passwordCheck) {
                     return res.status(400).json({ success: false, message: '비밀번호와 비밀번호 확인이 일치하지 않습니다.' })
                 }
@@ -19,35 +25,38 @@ class UsersController {
                     return res.status(400).json({ success: false, message: '비밀번호는 여섯자리 이상입니다.' })
                 }
             }
-            if (!name || !role || !address) {
+            if (!name || !role) {
                 return res.status(400).json({ success: false, message: '필수값이 누락되었습니다.' })
             }
 
-            await usersService.signUp(
+            await usersService.signUp({
                 email,
                 kakao,
                 password,
                 name,
                 role,
-                address,
-            )
+                address
+            })
             return res.status(200).json({
                 email,
                 name,
                 role,
             })
         } catch (err) {
-            return res.status(err.code).json(err)
+            return res.status(404).json(err)
         }
     }
 
     signIn = async (req, res) => {
         try {
+            console.log('c1111')
             const { email, kakao, password } = req.body;
+            console.log('c2222')
             const token = await usersService.signIn({ email, kakao, password })
+            console.log('c3333')
             return res.json(token);
         } catch (err) {
-            return res.status(err.code).json(err)
+            return res.status(404).json(err)
         }
     }
 

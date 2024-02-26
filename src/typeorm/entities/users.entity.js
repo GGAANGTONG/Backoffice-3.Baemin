@@ -36,6 +36,7 @@ export const Users = new EntitySchema({
     },
     grade: {
       type: 'varchar',
+      default: '고마운 분',
     },
     role: {
       type: 'enum',
@@ -48,6 +49,7 @@ export const Users = new EntitySchema({
     },
     createdAt: {
       type: 'datetime',
+      default: () => 'CURRENT_TIMESTAMP'
     },
     updatedAt: {
       type: 'datetime',
@@ -55,6 +57,7 @@ export const Users = new EntitySchema({
     },
     point: {
       type: 'bigint',
+      default: 0,
     },
   },
 });

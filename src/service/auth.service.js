@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 class AuthService {
     verifyAccessToken = async (accessToken) => {
-        const token = jwtwebToken.verify(accessToken, 'resume@#');
+        const token = jwtwebToken.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
         if (!token.userId) {
             throw new Error('인증 정보가 올바르지 않습니다.');
         }
@@ -19,7 +19,7 @@ class AuthService {
     }
 
     verifyFreshToken = async (refreshToken) => {
-        const token = jwtwebToken.verify(refreshToken, 'resume&%*');
+        const token = jwtwebToken.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
         if (!token.userId) {
             throw {
                 code: 401,
@@ -33,7 +33,7 @@ class AuthService {
                 message: '토큰 정보가 올바르지 않습니다.'
             }
         }
-        const user = await usersRepository.findOneUserByUserId(token.userId);
+        const user = await usersRepository.findUserByUserId(token.userId);
         if (!user) {
             throw {
                 code: 401,

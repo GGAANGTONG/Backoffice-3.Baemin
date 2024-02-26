@@ -2,27 +2,28 @@ import bcrypt from 'bcrypt'
 import jwtwebToken from 'jsonwebtoken'
 import usersRepository from '../repository/users.repository.js';
 import dotenv from 'dotenv';
-import { redisCache } from '../redis';
+import { redisCache } from '../redis/index.js';
 
 dotenv.config();
 class UsersService {
 
     signUp = async (data) => {
         const { email, kakao, password, name, role, address } = data;
+        console.log(data)
         if (kakao) {
-            const isExist = await usersRepository.findUserByEmail(kakao)
+            const isExist = await usersRepository.findUserByKakao(kakao)
             if (isExist) {
                 throw {
                     code: 400,
                     message: '이미 회원가입을 완료한 유저입니다.'
                 }
             }
-
             await usersRepository.createUser({
-                email: kakao,
-                kakao,
+                email,
+                kakao: email,
                 name,
-                grade,
+                role,
+                address
             })
         } else {
             const isExist = await usersRepository.findUserByEmail(email);
@@ -31,30 +32,32 @@ class UsersService {
                     code: 400,
                     message: '이미 회원가입을 완료한 유저입니다.'
                 }
+            } else {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                await usersRepository.createUser({
+                    email,
+                    password: hashedPassword,
+                    name,
+                    role,
+                    address
+                });
             }
-
-            const hashedPassword = await bcrypt.hash(password, 10);
-            await usersRepository.createUser({
-                email,
-                password: hashedPassword.tostring(),
-                name,
-                role,
-                address
-            });
         }
     }
 
     signIn = async ({ kakao, email, password }) => {
+        let user;
         if (kakao) {
-            let user = await usersRepository.findUserByEmail(kakao)
+            // 카카오 로그인
+            user = await usersRepository.findUserByKakao(kakao);
+
             if (!user) {
                 throw {
                     code: 401,
-                    message: '올바르지 않은 로그인 정보'
+                    message: '올바르지 않은 로그인 정보입니다.'
                 }
             }
         } else {
-            let user = await usersRepository.findUserByEmail(email)
             if (!email) {
                 throw {
                     code: 400,
@@ -62,29 +65,30 @@ class UsersService {
                 }
             }
             if (!password) {
-                throw {
+                return {
                     code: 400,
                     message: '비밀번호는 필수값입니다.'
+                };
+            }
+            user = await usersRepository.findUserByEmail(email)
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) {
+                throw {
+                    code: 401,
+                    message: '비밀번호 오류.'
                 }
             }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user = await usersRepository.findUserByEmailAndPassword(
-                email,
-                hashedPassword.toString());
-
             if (!user) {
                 throw {
                     code: 401,
-                    message: '올바르지 않은 로그인 정보'
+                    message: '올바르지 않은 로그인 정보입니다.'
                 }
             }
         }
-
+        // 로그인 성공
         const accessToken = jwtwebToken.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' })
         const refreshToken = jwtwebToken.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
-
         await redisCache.set(`REFRESH_TOKEN:${user.userId}`, refreshToken);
-
         return {
             accessToken,
             refreshToken,

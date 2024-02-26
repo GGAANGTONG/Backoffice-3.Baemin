@@ -1,18 +1,35 @@
-import { dataSource } from "../typeorm";
+import { dataSource } from "../typeorm/index.js";
 
 class UsersRepository {
     findUserByEmail = async (email) => {
-        const user = await dataSource.getRepository('Users').findOne({
+        const user = await dataSource.getRepository('users').findOne({
             where: {
-                email: email
+                email,
             }
         })
+        return user;
+    }
 
+    findUserByKakao = async (kakao) => {
+        const user = await dataSource.getRepository('users').findOne({
+            where: {
+                kakao,
+            }
+        })
+        return user;
+    }
+
+    findUserByUserId = async (userId) => {
+        const user = await dataSource.getRepository('users').findOne({
+            where: {
+                userId,
+            }
+        })
         return user;
     }
 
     findUserByEmailAndPassword = async (email, password) => {
-        const user = await dataSource.getRepository('Users').findOne({
+        const user = await dataSource.getRepository('users').findOne({
             where: {
                 email,
                 password,
@@ -21,25 +38,20 @@ class UsersRepository {
     }
 
     createUser = async (data) => {
-        await dataSource.getRepository('Users').insert(data);
+        await dataSource.getRepository('users').insert(data);
     }
 
     updateUser = async (userId, data) => {
-        await dataSource.getRepository('Users').update({
-            where: {
-                userId: userId,
-            },
+        await dataSource.getRepository('users').update({
+            userId: +userId,
         }, data)
     }
 
     deleteUser = async (userId) => {
-        await dataSource.getRepository('Users').delete({
-            where: {
-                userId: userId
-            }
-        });
+        await dataSource.getRepository('users').delete({
+            userId: +userId,
+        })
     }
 }
-
 const usersRepository = new UsersRepository();
 export default usersRepository;

@@ -17,7 +17,7 @@ const dataSource = new DataSource({
   password: process.env.ORM_PASSWORD,
   database: process.env.ORM_DATABASE,
   //database 동기화 명령(npx prisma db push랑 같음, 매우 위험)
-  synchronize: true,
+  synchronize: false,
   entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
   migrations: ['src/typeorm/migrations/*.js'],
   cli: {
@@ -29,3 +29,4 @@ const dataSource = new DataSource({
 await dataSource.initialize();
 
 export { dataSource };
+3 
