@@ -1,12 +1,24 @@
-import { dataSource } from '../typeorm/index';
-import { Orders } from '../typeorm/entities/orders.entity';
-import { Users } from '../typeorm/entities/users.entity';
+import { dataSource } from '../typeorm/index.js';
+import { Orders } from '../typeorm/entities/orders.entity.js';
+import { Users } from '../typeorm/entities/users.entity.js';
+import { Restaurant } from '../typeorm/entities/restaurant.entity.js';
 
 class OrdersRepository {
   ordersRepository = dataSource.getRepository(Orders);
 
-  getAllOrders = async () => {
-    return await this.ordersRepository.find();
+  findStoreId = async (email) => {
+    const restaurant = await dataSource
+      .getRepository(Restaurant)
+      .findOne({ where: { email: email } });
+    if (restaurant) {
+      return restaurant.storeId;
+    } else {
+      return null;
+    }
+  };
+
+  getAllOrders = async (storeId) => {
+    return await this.ordersRepository.find({ where: { storeId: storeId } });
   };
 
   getOrderById = async (orderId) => {

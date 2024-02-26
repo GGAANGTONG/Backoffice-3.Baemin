@@ -2,7 +2,11 @@ import OrdersRepository from '../repositories/orders.repository.js';
 
 class OrdersService {
   getAllOrders = async () => {
-    return await OrdersRepository.getAllOrders();
+    return await OrdersRepository.getAllOrders(storeId);
+  };
+
+  findStoreId = async (email) => {
+    return await OrdersRepository.findStoreId(email);
   };
 
   getOrderById = async (orderId) => {

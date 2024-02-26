@@ -3,13 +3,21 @@ import OrdersService from '../services/orders.service.js';
 class OrdersController {
   getAllOrders = async (req, res, next) => {
     try {
-      const user = req.user;
+      const user = res.locals.user;
 
       if (user.role !== 'owner') {
         return res.status(400).json({ errorMessage: '접근 권한이 없습니다.' });
       }
 
-      const orders = await OrdersService.getAllOrders();
+      const storeId = await OrdersService.findStoreId(user.email);
+
+      if (!storeId) {
+        return res
+          .status(404)
+          .json({ errorMessage: '계정으로 등록된 가게가 없습니다.' });
+      }
+
+      const orders = await OrdersService.getAllOrders(storeId);
 
       if (!orders.length) {
         return res.status(404).json({ errorMessage: '주문이 없습니다.' });
@@ -23,7 +31,7 @@ class OrdersController {
 
   getOrderById = async (req, res, next) => {
     try {
-      const user = req.user;
+      const user = res.locals.user;
 
       if (user.role !== 'owner') {
         return res.status(400).json({ errorMessage: '접근 권한이 없습니다.' });
@@ -44,7 +52,7 @@ class OrdersController {
 
   updateOrder = async (req, res, next) => {
     try {
-      const user = req.user;
+      const user = res.locals.user;
 
       if (user.role !== 'owner') {
         return res.status(400).json({ errorMessage: '접근 권한이 없습니다.' });

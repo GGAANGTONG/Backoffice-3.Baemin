@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
+dotenv.config();
 import { Coupons } from './entities/coupons.entity.js';
 import { Menu } from './entities/menu.entity.js';
 import { Orders } from './entities/orders.entity.js';
@@ -8,7 +9,6 @@ import { Restaurant } from './entities/restaurant.entity.js';
 import { Review } from './entities/review.entity.js';
 import { Users } from './entities/users.entity.js';
 
-dotenv.config();
 const dataSource = new DataSource({
   type: 'mysql',
   host: process.env.ORM_HOST,
@@ -17,7 +17,7 @@ const dataSource = new DataSource({
   password: process.env.ORM_PASSWORD,
   database: process.env.ORM_DATABASE,
   //database 동기화 명령(npx prisma db push랑 같음, 매우 위험)
-  synchronize: true,
+  synchronize: false,
   entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
   migrations: ['src/typeorm/migrations/*.js'],
   cli: {
