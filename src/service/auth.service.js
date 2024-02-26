@@ -1,7 +1,9 @@
 import jwtwebToken from 'jsonwebtoken';
 import usersRepository from '../repository/users.repository.js';
 import { redisCache } from '../redis/index.js';
+import dotenv from 'dotenv'
 
+dotenv.config();
 class AuthService {
     verifyAccessToken = async (accessToken) => {
         const token = jwtwebToken.verify(accessToken, 'resume@#');
@@ -39,8 +41,8 @@ class AuthService {
             }
         }
 
-        const newAccessToken = jwtwebToken.sign({ userId: user.userId }, 'resume@#', { expiresIn: '12h' });
-        const newRefreshToken = jwtwebToken.sign({ userId: user.userId }, 'resume&%*', { expiresIn: '7d' });
+        const newAccessToken = jwtwebToken.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' });
+        const newRefreshToken = jwtwebToken.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
 
         return {
             accessToken: newAccessToken,
