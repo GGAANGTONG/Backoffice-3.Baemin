@@ -1,82 +1,46 @@
+import { dataSource } from '../typeorm/index.js';
+import { Review } from '../entity/Review.js'; 
 class ReviewsRepository {
-    constructor(prisma) {
-      this.prisma = prisma;
-    }
-  
-    async create({ userId, storeId, rating, content }) {
-        return this.prisma.review.create({
-          data: {
-            userId,
-            storeId,
-            rating,
-            content,
-          },
-        });
-    }
-  
-    async findAll({ storeId, orderKey = 'createdAt', orderValue = 'desc' }) {
-        return this.prisma.review.findMany({
-            where: {
-              storeId,
-            },
-            orderBy: {
-                [orderKey]: orderValue,
-            },
-            select: {
-                userId: true,
-                storeId: true,
-                rating: true,
-                content: true,
-                createdAt: true,
-                user: {
-                    select: {
-                        name: true
-                    },
-                },
-                restaurant: {
-                    select: {
-                        name: true
-                    },
-                },
-            },
-        });
-    }
-  
-    async findById(reviewId) {
-      return this.prisma.review.findUnique({
-        where: { id: reviewId },
-        select: {
-            userId: true,
-            storeId: true,
-            rating: true,
-            content: true,
-            createdAt: true,
-            user: {
-                select: {
-                    name: true
-                },
-            },
-            restaurant: {
-                select: {
-                    name: true
-                },
-            },
-        },
-      });
-    }
-  
-    async update(reviewId, data) {
-      return this.prisma.review.update({
-        where: { id: reviewId },
-        data,
-      });
-    }
-  
-    async delete(reviewId) {
-      return this.prisma.review.delete({
-        where: { id: reviewId },
-      });
-    }
+  async create({ userId, storeId, menuId, rating, content }) {
+    const reviewRepository = dataSource.getRepository(Review);
+    const review = reviewRepository.create({
+      userId,
+      storeId,
+      menuId,
+      rating,
+      content,
+    });
+
+    return reviewRepository.save(review);
+  }
+
+  async findAll({ storeId, orderKey = 'createdAt', orderValue = 'desc' }) {
+    const reviewRepository = dataSource.getRepository(Review);
+    return reviewRepository.find({
+      where: { storeId },
+      order: { [orderKey]: orderValue === 'desc' ? 'DESC' : 'ASC' },
+      relations: ['user', 'restaurant', 'menu'],
+    });
+  }
+
+  async findById(reviewId) {
+    const reviewRepository = dataSource.getRepository(Review);
+    return reviewRepository.findOne({
+      where: { id: reviewId },
+      relations: ['user', 'restaurant', 'menu'],
+    });
+  }
+
+  async update(reviewId, data) {
+    const reviewRepository = dataSource.getRepository(Review);
+    await reviewRepository.update(reviewId, data);
+    return this.findById(reviewId); 
+  }
+
+  async delete(reviewId) {
+    const reviewRepository = dataSource.getRepository(Review);
+    return reviewRepository.delete(reviewId);
+  }
 }
 
 export default ReviewsRepository;

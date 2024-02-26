@@ -28,7 +28,7 @@ describe('ReviewsRepository', () => {
   });
 
   it('리뷰를 생성해라', async () => {
-    const reviewData = { userId: 1, storeId: 1, rating: 5, comment: 'Great!' };
+    const reviewData = { userId: 1, storeId: 1, rating: 5, content: 'Great!' };
     prisma.review.create.mockResolvedValue(reviewData);
 
     const result = await repository.create(reviewData);
@@ -38,7 +38,7 @@ describe('ReviewsRepository', () => {
   });
 
   it('모든 리뷰를 찾아라', async () => {
-    const reviews = [{ id: 1, userId: 1, storeId: 1, rating: 5, comment: 'Good' }];
+    const reviews = [{ id: 1, userId: 1, storeId: 1, rating: 5, content: 'Good' }];
     prisma.review.findMany.mockResolvedValue(reviews);
 
     const result = await repository.findAll({ storeId: 1 });
@@ -48,7 +48,7 @@ describe('ReviewsRepository', () => {
   });
 
   it('id로 리뷰를 찾아라', async () => {
-    const review = { id: 1, userId: 1, storeId: 1, rating: 5, comment: 'Excellent' };
+    const review = { id: 1, userId: 1, storeId: 1, rating: 5, content: 'Excellent' };
     prisma.review.findUnique.mockResolvedValue(review);
 
     const result = await repository.findById(1);
@@ -61,7 +61,7 @@ describe('ReviewsRepository', () => {
   });
 
   it('리뷰를 업데이트 해라', async () => {
-    const updatedReviewData = { rating: 4, comment: 'Very good' };
+    const updatedReviewData = { rating: 4, content: 'Very good' };
     prisma.review.update.mockResolvedValue(updatedReviewData);
 
     const result = await repository.update(1, updatedReviewData);
