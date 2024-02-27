@@ -32,23 +32,23 @@ export class UsersRepository {
     }
 
     createUser = async (data) => {
-        await this.dataSource.getRepository('users').insert(data);
+        return await this.dataSource.getRepository('users').insert(data);
     }
 
     updateUserByUserId = async (userId, data) => {
-        await this.dataSource.getRepository('users').update({
+        return await this.dataSource.getRepository('users').update({
             userId: +userId,
         }, data)
     }
 
     updateUserByEmail = async (email, data) => {
-        await this.dataSource.getRepository('users').update({
+        return await this.dataSource.getRepository('users').update({
             email: email,
         }, data)
     }
 
     deleteUser = async (userId) => {
-        await this.dataSource.getRepository('users').delete({
+        return await this.dataSource.getRepository('users').delete({
             userId: +userId,
         })
     }

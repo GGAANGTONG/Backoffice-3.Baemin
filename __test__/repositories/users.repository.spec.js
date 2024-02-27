@@ -18,14 +18,9 @@ let mockdataSource = {
 const usersRepository = new UsersRepository(mockdataSource)
 
 describe('UsersRepository_test_code', () => {
-
-
     beforeEach(() => {
         jest.resetAllMocks();
     });
-    // afterEach(() => {
-    //     // Implement any cleanup logic after each test
-    // });
 
     it('findUserByEmail', async () => {
         let testUser = {
@@ -63,7 +58,6 @@ describe('UsersRepository_test_code', () => {
         expect(user).toBe(expectedReturn);
     });
 
-    // createUser 테스트
     it('createUser', async () => {
         let testUser = {
             userId: 1,
@@ -76,7 +70,6 @@ describe('UsersRepository_test_code', () => {
         expect(user).toEqual(expectedReturn);
     });
 
-    // updateUserByUserId 테스트
     it('updateUserByUserId', async () => {
         let testUser = {
             userId: 1,
@@ -93,7 +86,6 @@ describe('UsersRepository_test_code', () => {
         expect(user).toEqual(updatedData);
     });
 
-    // updateUserByEmail 테스트
     it('updateUserByEmail', async () => {
         let testUser = {
             userId: 1,
@@ -110,7 +102,6 @@ describe('UsersRepository_test_code', () => {
         expect(user).toEqual(updatedData);
     });
 
-    // deleteUser 테스트
     it('deleteUser', async () => {
         let testUser = {
             userId: 1,
