@@ -20,13 +20,25 @@ export class UsersService {
                     message: '이미 회원가입을 완료한 유저입니다.'
                 }
             }
-            await this.usersRepository.createUser({
-                email,
-                kakao: email,
-                name,
-                role,
-                address
-            })
+            if (role === '회원') {
+                await this.usersRepository.createUser({
+                    email,
+                    kakao: email,
+                    name,
+                    role,
+                    address,
+                    point: 1000000
+                })
+            } else {
+                await this.usersRepository.createUser({
+                    email,
+                    kakao: email,
+                    name,
+                    role,
+                    address,
+                })
+            }
+
         } else {
             const isExist = await this.usersRepository.findUserByEmail(email);
             if (isExist) {
@@ -36,13 +48,25 @@ export class UsersService {
                 }
             } else {
                 const hashedPassword = await bcrypt.hash(password, 10);
-                await this.usersRepository.createUser({
-                    email,
-                    password: hashedPassword,
-                    name,
-                    role,
-                    address
-                });
+                if (role === '회원') {
+                    await this.usersRepository.createUser({
+                        email,
+                        password: hashedPassword,
+                        name,
+                        role,
+                        address,
+                        point: 1000000
+                    })
+                } else {
+                    await this.usersRepository.createUser({
+                        email,
+                        password: hashedPassword,
+                        name,
+                        role,
+                        address
+                    });
+                }
+
             }
         }
     }

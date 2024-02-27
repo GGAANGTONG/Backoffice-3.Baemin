@@ -17,12 +17,8 @@ let mockdataSource = {
 
 const usersRepository = new UsersRepository(mockdataSource)
 
-describe('UsersRepository', () => {
-    const testUser = {
-        userId: 1,
-        email: 'test@example.com',
-        kakao: 'test_kakao_id',
-    };
+describe('UsersRepository_test_code', () => {
+
 
     beforeEach(() => {
         jest.resetAllMocks();
@@ -32,51 +28,99 @@ describe('UsersRepository', () => {
     // });
 
     it('findUserByEmail', async () => {
-        const expectedReturn = '굿'
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const expectedReturn = 'email'
         mockdataSource.getRepository('users').findOne.mockResolvedValueOnce(expectedReturn)
         const user = await usersRepository.findUserByEmail(testUser.email);
         expect(user).toBe(expectedReturn);
     });
 
     it('findUserByKakao', async () => {
-        const expectedReturn = undefined
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const expectedReturn = 'kakao'
         mockdataSource.getRepository('users').findOne.mockResolvedValueOnce(expectedReturn)
         const user = await usersRepository.findUserByKakao(testUser.kakao);
         expect(user).toBe(expectedReturn);
     });
 
     it('findUserByUserId', async () => {
-        const expectedReturn = '굿'
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const expectedReturn = 'userId'
         mockdataSource.getRepository('users').findOne.mockResolvedValueOnce(expectedReturn)
-        const user = await usersRepository.findUserByKakao(testUser.kakao);
+        const user = await usersRepository.findUserByUserId(testUser.kakao);
         expect(user).toBe(expectedReturn);
     });
 
+    // createUser 테스트
     it('createUser', async () => {
-        const data = { /* your test user data */ };
-        await usersRepository.createUser(data);
-        const createdUser = await usersRepository.findUserByEmail(data.email);
-        expect(createdUser).toBe(1);
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const expectedReturn = testUser;
+        mockdataSource.getRepository('users').insert.mockResolvedValueOnce(expectedReturn);
+        const user = await usersRepository.createUser(testUser);
+        expect(user).toEqual(expectedReturn);
     });
 
+    // updateUserByUserId 테스트
     it('updateUserByUserId', async () => {
-        const updatedData = { /* your updated data */ };
-        await usersRepository.updateUserByUserId(testUser.userId, updatedData);
-        const updatedUser = await usersRepository.findUserByUserId(testUser.userId);
-        expect(updatedUser).toBe(1);
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const updatedData = {
+            userId: 1,
+            email: 'updatedtest@example.com',
+            kakao: 'updatedtest_kakao_id',
+        };
+        mockdataSource.getRepository('users').update.mockResolvedValueOnce(updatedData);
+        const user = await usersRepository.updateUserByUserId(testUser.userId, updatedData);
+        expect(user).toEqual(updatedData);
     });
 
+    // updateUserByEmail 테스트
     it('updateUserByEmail', async () => {
-        const updatedData = { /* your updated data */ };
-        await usersRepository.updateUserByEmail(testUser.email, updatedData);
-        const updatedUser = await usersRepository.findUserByEmail(testUser.email);
-        expect(updatedUser).toBe(1);
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const updatedData = {
+            userId: 1,
+            email: 'updatedtest@example.com',
+            kakao: 'updatedtest_kakao_id',
+        };
+        mockdataSource.getRepository('users').update.mockResolvedValueOnce(updatedData);
+        const user = await usersRepository.updateUserByEmail(testUser.email, updatedData);
+        expect(user).toEqual(updatedData);
     });
 
-    it('deleteUserByUserId', async () => {
-        const expectedReturn = '굿'
-        mockdataSource.getRepository('users').delete.mockResolvedValueOnce(expectedReturn)
-        const deletedUser = await usersRepository.deleteUser(testUser.userId);
-        expect(deletedUser).toBe(expectedReturn);
+    // deleteUser 테스트
+    it('deleteUser', async () => {
+        let testUser = {
+            userId: 1,
+            email: 'test@example.com',
+            kakao: 'test_kakao_id',
+        };
+        const expectedReturn = null;
+        mockdataSource.getRepository('users').delete.mockResolvedValueOnce(expectedReturn);
+        const user = await usersRepository.deleteUser(testUser.userId);
+        expect(user).toBe(expectedReturn);
     });
 });
+
