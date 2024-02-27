@@ -28,22 +28,19 @@ class UsersRepository {
         return user;
     }
 
-    findUserByEmailAndPassword = async (email, password) => {
-        const user = await dataSource.getRepository('users').findOne({
-            where: {
-                email,
-                password,
-            }
-        })
-    }
-
     createUser = async (data) => {
         await dataSource.getRepository('users').insert(data);
     }
 
-    updateUser = async (userId, data) => {
+    updateUserByUserId = async (userId, data) => {
         await dataSource.getRepository('users').update({
             userId: +userId,
+        }, data)
+    }
+
+    updateUserByEmail = async (email, data) => {
+        await dataSource.getRepository('users').update({
+            email: email,
         }, data)
     }
 

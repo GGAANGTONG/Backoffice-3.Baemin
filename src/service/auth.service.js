@@ -1,4 +1,4 @@
-import jwtwebToken from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import usersRepository from '../repository/users.repository.js';
 import { redisCache } from '../redis/index.js';
 import dotenv from 'dotenv'
@@ -6,11 +6,13 @@ import dotenv from 'dotenv'
 dotenv.config();
 class AuthService {
     verifyAccessToken = async (accessToken) => {
-        const token = jwtwebToken.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
+        console.log(' Token is ', accessToken, process.env.ACCESS_TOKEN_KEY)
+        const token = jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
+        console.log(token)
         if (!token.userId) {
             throw new Error('인증 정보가 올바르지 않습니다.');
         }
-        const user = await usersRepository.findOneUserByUserId(token.userId);
+        const user = await usersRepository.findUserByUserId(token.userId);
 
         if (!user) {
             throw new Error('인증 정보가 올바르지 않습니다.');
@@ -19,7 +21,8 @@ class AuthService {
     }
 
     verifyFreshToken = async (refreshToken) => {
-        const token = jwtwebToken.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+        const token = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+        console.log(token)
         if (!token.userId) {
             throw {
                 code: 401,
@@ -41,8 +44,8 @@ class AuthService {
             }
         }
 
-        const newAccessToken = jwtwebToken.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' });
-        const newRefreshToken = jwtwebToken.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
+        const newAccessToken = jwt.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' });
+        const newRefreshToken = jwt.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
 
         return {
             accessToken: newAccessToken,

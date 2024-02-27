@@ -11,7 +11,9 @@ if (process.env.NODE_ENV === 'test') {
     redisCache = Cache.create('redis', {
         port: process.env.REDIS_PORT,
         host: process.env.REDIS_HOST,
-        db: '0',
+        // username: process.env.REDIS_USERNAME,
+        // password: process.env.REDIS_PASSWORD,
+        db: 0,
         ttl: 60 * 1000 // milliseconds
     });
 }

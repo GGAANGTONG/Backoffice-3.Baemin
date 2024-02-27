@@ -1,15 +1,13 @@
 import bcrypt from 'bcrypt'
-import jwtwebToken from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import usersRepository from '../repository/users.repository.js';
 import dotenv from 'dotenv';
 import { redisCache } from '../redis/index.js';
 
 dotenv.config();
 class UsersService {
-
     signUp = async (data) => {
         const { email, kakao, password, name, role, address } = data;
-        console.log(data)
         if (kakao) {
             const isExist = await usersRepository.findUserByKakao(kakao)
             if (isExist) {
@@ -86,17 +84,26 @@ class UsersService {
             }
         }
         // 로그인 성공
-        const accessToken = jwtwebToken.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' })
-        const refreshToken = jwtwebToken.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
-        await redisCache.set(`REFRESH_TOKEN:${user.userId}`, refreshToken);
+        const accessToken = jwt.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '12h' })
+        const refreshToken = jwt.sign({ userId: user.userId }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' });
+
+        await redisCache.set(user.userId, refreshToken);
+        // const redisToken = await redisCache.get(user.userId);
+        // console.log('redis는 잘 살아있는가? : ', redisToken)
         return {
             accessToken,
             refreshToken,
         }
     }
 
-    verifyEmail = async (email) => {
-
+    findUser = async (email, kakao) => {
+        if (email) {
+            const user = await usersRepository.findUserByEmail(email)
+            return user
+        } else {
+            const user = await usersRepository.findUserByKakao(kakao)
+            return user
+        }
     }
 
     deleteUser = async (userId) => {

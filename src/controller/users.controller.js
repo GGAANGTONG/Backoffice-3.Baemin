@@ -1,8 +1,7 @@
-import { Code } from "typeorm";
 import usersService from "../service/users.service.js";
 
 class UsersController {
-    signUp = async (req, res, next) => {
+    signUp = async (req, res) => {
         // ORM인 Prisma에서 Posts 모델의 create 메서드를 사용해 데이터를 요청합니다.
         try {
             const { email, kakao, password, passwordCheck, name, role, address } = req.body;
@@ -48,38 +47,30 @@ class UsersController {
     }
 
     signIn = async (req, res) => {
-        try {
-            console.log('c1111')
-            const { email, kakao, password } = req.body;
-            console.log('c2222')
-            const token = await usersService.signIn({ email, kakao, password })
-            console.log('c3333')
-            return res.json(token);
-        } catch (err) {
-            return res.status(404).json(err)
-        }
+        // try {
+        const { email, kakao, password } = req.body;
+        const { accessToken, refreshToken } = await usersService.signIn({ email, kakao, password })
+        res.cookie('access', `Bearer ${accessToken}`);
+        res.cookie('refresh', `Bearer ${refreshToken}`);
+        return res.json({ accessToken, refreshToken });
+
+        // } catch (err) {
+        //     return res.status(404).json(err)
+        // }
     }
 
     getInfo = async (req, res) => {
-        try {
-            const user = res.locals.user;
+        // try {
+        const user = res.locals.user;
+        console.log(user)
 
-            return res.json({
-                email: user.email,
-                name: user.name,
-            })
-        } catch (err) {
-            return res.status(err.code).json(err)
-        }
-    }
-
-    verify = async (req, res) => {
-        try {
-            const { email } = req.body();
-            await usersService.verify(email);
-        } catch (err) {
-            return res.status(err.code).json(err)
-        }
+        return res.json({
+            email: user.email,
+            name: user.name,
+        })
+        // } catch (err) {
+        //     return res.status(err.code).json(err)
+        // }
     }
 
 }

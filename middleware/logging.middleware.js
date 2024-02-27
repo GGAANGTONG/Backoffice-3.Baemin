@@ -15,6 +15,5 @@ export default (req, res, next, err) => {
             `Method: ${req.method}, URL: ${req.url}, Status: ${res.statusCode}, Duration: ${duration}ms`
         );
     });
-
     next();
 };

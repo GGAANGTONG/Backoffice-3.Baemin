@@ -6,3 +6,5 @@ ormconfig.json
 
 logs
 config
+
+redis_test.js
