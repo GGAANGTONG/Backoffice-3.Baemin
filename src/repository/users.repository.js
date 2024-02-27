@@ -1,8 +1,11 @@
-import { dataSource } from "../typeorm/index.js";
+// import { dataSource } from "../typeorm/index.js";
 
-class UsersRepository {
+export class UsersRepository {
+    constructor(dataSource) {
+        this.dataSource = dataSource
+    }
     findUserByEmail = async (email) => {
-        const user = await dataSource.getRepository('users').findOne({
+        const user = await this.dataSource.getRepository('users').findOne({
             where: {
                 email,
             }
@@ -11,7 +14,7 @@ class UsersRepository {
     }
 
     findUserByKakao = async (kakao) => {
-        const user = await dataSource.getRepository('users').findOne({
+        const user = await this.dataSource.getRepository('users').findOne({
             where: {
                 kakao,
             }
@@ -20,7 +23,7 @@ class UsersRepository {
     }
 
     findUserByUserId = async (userId) => {
-        const user = await dataSource.getRepository('users').findOne({
+        const user = await this.dataSource.getRepository('users').findOne({
             where: {
                 userId,
             }
@@ -29,26 +32,24 @@ class UsersRepository {
     }
 
     createUser = async (data) => {
-        await dataSource.getRepository('users').insert(data);
+        await this.dataSource.getRepository('users').insert(data);
     }
 
     updateUserByUserId = async (userId, data) => {
-        await dataSource.getRepository('users').update({
+        await this.dataSource.getRepository('users').update({
             userId: +userId,
         }, data)
     }
 
     updateUserByEmail = async (email, data) => {
-        await dataSource.getRepository('users').update({
+        await this.dataSource.getRepository('users').update({
             email: email,
         }, data)
     }
 
     deleteUser = async (userId) => {
-        await dataSource.getRepository('users').delete({
+        await this.dataSource.getRepository('users').delete({
             userId: +userId,
         })
     }
 }
-const usersRepository = new UsersRepository();
-export default usersRepository;

@@ -1,6 +1,11 @@
-import usersService from "../service/users.service.js";
+// import usersService from "../service/users.service.js"; // 본체와 단절시킨다.
 
-class UsersController {
+export class UsersController {
+    // 생성자 함수를 통해 usersService의 설계도를 가져옴. -> 생성해서 쓸것이다. 
+    constructor(usersService) {
+        //  this.생성된 인스턴스 = 설계도
+        this.usersService = usersService;
+    }
     signUp = async (req, res) => {
         // ORM인 Prisma에서 Posts 모델의 create 메서드를 사용해 데이터를 요청합니다.
         try {
@@ -28,7 +33,7 @@ class UsersController {
                 return res.status(400).json({ success: false, message: '필수값이 누락되었습니다.' })
             }
 
-            await usersService.signUp({
+            await this.usersService.signUp({
                 email,
                 kakao,
                 password,
@@ -49,7 +54,7 @@ class UsersController {
     signIn = async (req, res) => {
         // try {
         const { email, kakao, password } = req.body;
-        const { accessToken, refreshToken } = await usersService.signIn({ email, kakao, password })
+        const { accessToken, refreshToken } = await this.usersService.signIn({ email, kakao, password })
         res.cookie('access', `Bearer ${accessToken}`);
         res.cookie('refresh', `Bearer ${refreshToken}`);
         return res.json({ accessToken, refreshToken });
@@ -74,6 +79,3 @@ class UsersController {
     }
 
 }
-
-const usersController = new UsersController();
-export default usersController;

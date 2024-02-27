@@ -1,22 +1,28 @@
-import verifyService from "../service/verify.service.js";
-import usersService from "../service/users.service.js";
+// import verifyService from "../service/verify.service.js";
+// import usersService from "../service/users.service.js";
 import jwt from 'jsonwebtoken';
-import emailSender from '../../middleware/nodemailer.middleware.js'
-import usersRepository from "../repository/users.repository.js";
+// import emailSender from '../../middleware/nodemailer.middleware.js'
+// import usersRepository from "../repository/users.repository.js";
 
-class VerifyController {
+export class VerifyController {
+    constructor(usersService, emailSender, usersRepository, verifyService) {
+        this.usersService = usersService;
+        this.emailSender = emailSender;
+        this.usersRepository = usersRepository;
+        this.verifyService = verifyService
+    }
     sendVerifyEmail = async (req, res) => {
         const { email } = req.body;
 
         // try {
-        const user = await usersService.findUser(email);
+        const user = await this.usersService.findUser(email);
         if (!user) {
             return res.status(404).json({ ok: false, msg: '유저를 찾을 수 없습니다..' });
         }
         if (!user.verify) {
-            const verifyToken = verifyService.createVerifyToken(user.email);
+            const verifyToken = this.verifyService.createVerifyToken(user.email);
             res.cookie('verification', `Bearer ${verifyToken}`);
-            emailSender(email, verifyToken);
+            this.emailSender(email, verifyToken);
 
             return res.json({
                 ok: true,
@@ -41,7 +47,7 @@ class VerifyController {
             const data = {
                 verify: true
             }
-            const updatedVerify = await usersRepository.updateUserByEmail(email, data);
+            const updatedVerify = await this.usersRepository.updateUserByEmail(email, data);
 
             return res.status(200).json({
                 message: '이메일 인가 완료.',
@@ -56,5 +62,3 @@ class VerifyController {
         // }
     }
 }
-
-export const verifyController = new VerifyController();

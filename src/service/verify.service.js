@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken';
-
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-class VerifyService {
+export class VerifyService {
     createVerifyToken = (email) => {
         try {
             const verifyToken = jwt.sign({ email }, process.env.VERIFY_TOKEN_KEY, {
@@ -17,5 +16,3 @@ class VerifyService {
     }
 }
 
-const verifyService = new VerifyService();
-export default verifyService;

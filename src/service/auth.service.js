@@ -1,10 +1,14 @@
 import jwt from 'jsonwebtoken';
-import usersRepository from '../repository/users.repository.js';
-import { redisCache } from '../redis/index.js';
+// import usersRepository from '../repository/users.repository.js';
+// import { redisCache } from '../redis/index.js';
 import dotenv from 'dotenv'
 
 dotenv.config();
-class AuthService {
+export class AuthService {
+    constructor(usersRepository, redisCache) {
+        this.usersRepository = usersRepository;
+        this.redisCache = redisCache
+    }
     verifyAccessToken = async (accessToken) => {
         console.log(' Token is ', accessToken, process.env.ACCESS_TOKEN_KEY)
         const token = jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
@@ -12,7 +16,7 @@ class AuthService {
         if (!token.userId) {
             throw new Error('인증 정보가 올바르지 않습니다.');
         }
-        const user = await usersRepository.findUserByUserId(token.userId);
+        const user = await this.usersRepository.findUserByUserId(token.userId);
 
         if (!user) {
             throw new Error('인증 정보가 올바르지 않습니다.');
@@ -29,14 +33,14 @@ class AuthService {
                 message: '토큰 정보가 올바르지 않습니다.'
             }
         }
-        const redis = await redisCache.get(`REFRESH_TOKEN:${token.userId}`);
+        const redis = await this.redisCache.get(`REFRESH_TOKEN:${token.userId}`);
         if (!redis || redis !== refreshToken) {
             throw {
                 code: 401,
                 message: '토큰 정보가 올바르지 않습니다.'
             }
         }
-        const user = await usersRepository.findUserByUserId(token.userId);
+        const user = await this.usersRepository.findUserByUserId(token.userId);
         if (!user) {
             throw {
                 code: 401,
@@ -53,6 +57,3 @@ class AuthService {
         }
     }
 }
-
-const authService = new AuthService();
-export default authService;

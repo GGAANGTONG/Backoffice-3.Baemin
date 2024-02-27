@@ -3,7 +3,7 @@ import { Cache } from 'cache-store-manager';
 
 dotenv.config();
 
-let redisCache;
+export let redisCache;
 
 if (process.env.NODE_ENV === 'test') {
     redisCache = {};
@@ -18,4 +18,3 @@ if (process.env.NODE_ENV === 'test') {
     });
 }
 
-export { redisCache };

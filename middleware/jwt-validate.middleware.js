@@ -1,4 +1,11 @@
-import authService from "../src/service/auth.service.js";
+// import authService, { AuthService } from "../src/service/auth.service.js";
+import { redisCache } from "../src/redis/index.js";
+import { UsersRepository } from "../src/repository/users.repository.js";
+import { AuthService } from "../src/service/auth.service.js";
+import { dataSource } from "../src/typeorm/index.js";
+
+const usersRepository = new UsersRepository(dataSource)
+const authService = new AuthService(usersRepository, redisCache)
 
 const jwtValidate = async (req, res, next) => {
     // try {
