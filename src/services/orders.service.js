@@ -1,25 +1,24 @@
-import OrdersRepository from '../repositories/orders.repository.js';
-
-class OrdersService {
-  getAllOrders = async () => {
-    return await OrdersRepository.getAllOrders(storeId);
+export class OrdersService {
+  constructor(ordersRepository) {
+    this.ordersRepository = ordersRepository;
+  }
+  getAllOrders = async (storeId) => {
+    return await this.ordersRepository.getAllOrders(storeId);
   };
 
   findStoreId = async (email) => {
-    return await OrdersRepository.findStoreId(email);
+    return await this.ordersRepository.findStoreId(email);
   };
 
   getOrderById = async (orderId) => {
-    return await OrdersRepository.getOrderById(orderId);
+    return await this.ordersRepository.getOrderById(orderId);
   };
 
   updateOrder = async (orderId, status) => {
-    return await OrdersRepository.updateOrder(orderId, status);
+    return await this.ordersRepository.updateOrder(orderId, status);
   };
 
   completeOrder = async (orderId, userId) => {
-    return await OrdersRepository.completeOrder(orderId, userId);
+    return await this.ordersRepository.completeOrder(orderId, userId);
   };
 }
-
-export default new OrdersService();
