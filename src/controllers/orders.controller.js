@@ -45,6 +45,14 @@ export class OrdersController {
         return res.status(404).json({ errorMessage: '해당 주문이 없습니다.' });
       }
 
+      const storeId = await this.ordersService.findStoreId(user.email);
+
+      if (storeId !== order.storeId) {
+        return res
+          .status(400)
+          .json({ errorMessage: '해당 가게의 주문이 아닙니다.' });
+      }
+
       return res.status(200).json({ data: order });
     } catch (error) {
       next(error);
@@ -85,23 +93,26 @@ export class OrdersController {
       }
 
       if (order.status === '배달 완료') {
-        ('이미 배달이 완료된 주문입니다.');
+        return res.status(400).json('이미 배달이 완료된 주문입니다.');
+      }
+
+      if (status === '배달 완료') {
+        const resultPoint = await this.ordersService.completeOrder(
+          orderId,
+          user.userId
+        );
+
+        await this.ordersService.updateOrder(orderId, status);
+
+        return res.status(200).json({
+          message: `성공적으로 배달 완료 처리되었습니다. 현재 포인트: ${resultPoint}`,
+        });
       }
 
       const updatedOrder = await this.ordersService.updateOrder(
         orderId,
         status
       );
-
-      if (updatedOrder.status === '배달 완료') {
-        const resultPoint = await this.ordersService.completeOrder(
-          orderId,
-          user.userId
-        );
-        return res.status(200).json({
-          message: `성공적으로 배달 완료 처리되었습니다. 현재 포인트: ${resultPoint}`,
-        });
-      }
 
       return res.status(200).json({
         data: updatedOrder,

@@ -19,7 +19,10 @@ const dataSource = new DataSource({
   //database 동기화 명령(npx prisma db push랑 같음, 매우 위험)
   synchronize: false,
   entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
-  migrations: ['src/typeorm/migrations/1709098791699-Users.js'],
+  migrations: [
+    'src/typeorm/migrations/1709098791699-Users.js',
+    'src/typeorm/migrations/1709107281035-Orders.js',
+  ],
   cli: {
     entitiesDir: 'src/typeorm/entities',
     migrationsDir: 'src/typeorm/migrations',

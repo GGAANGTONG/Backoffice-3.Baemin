@@ -42,7 +42,7 @@ export class OrdersRepository {
     const user = await this.dataSource.getRepository('users').findOne({
       where: { userId: userId },
     });
-    user.point += order.totalPrice;
+    user.point = user.point - 0 + (order.totalPrice - 0);
     await this.dataSource.getRepository('users').save(user);
     return user.point;
   }
