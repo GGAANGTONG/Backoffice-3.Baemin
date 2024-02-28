@@ -217,3 +217,4 @@
 2024-02-28 20:59:43 info: Received GET request for /api/restaurants/specific/%ED%94%BC%EC%9E%90
 2024-02-28 20:59:49 info: Received GET request for /api/restaurants
 2024-02-28 21:00:01 info: Received GET request for /api/restaurants/specific/%ED%94%BC%EC%9E%90
+2024-02-28 21:21:09 info: Received GET request for /api/reviews
