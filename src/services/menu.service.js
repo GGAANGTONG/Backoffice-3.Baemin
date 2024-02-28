@@ -11,6 +11,7 @@ export class MenuService {
     if (!ownersRestaurant) {
       throw new Error('고객님의 가게 정보가 존재하지 않습니다.');
     }
+    // TODO 업장 내에서 동일한 메뉴 이름으로는 재등록이 불가해야 함
     const storeId = ownersRestaurant.storeId;
     const createdMenu = await this.menuRepository.createMenu(
       storeId,
