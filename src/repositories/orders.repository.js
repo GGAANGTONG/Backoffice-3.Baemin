@@ -1,51 +1,49 @@
-import { dataSource } from '../typeorm/index.js';
-import { Orders } from '../typeorm/entities/orders.entity.js';
-import { Users } from '../typeorm/entities/users.entity.js';
-import { Restaurant } from '../typeorm/entities/restaurant.entity.js';
+export class OrdersRepository {
+  constructor(dataSource) {
+    this.dataSource = dataSource;
+  }
 
-class OrdersRepository {
-  ordersRepository = dataSource.getRepository(Orders);
-
-  findStoreId = async (email) => {
-    const restaurant = await dataSource
-      .getRepository(Restaurant)
+  async findStoreId(email) {
+    const restaurant = await this.dataSource
+      .getRepository('restaurant')
       .findOne({ where: { email: email } });
     if (restaurant) {
       return restaurant.storeId;
     } else {
       return null;
     }
-  };
+  }
 
-  getAllOrders = async (storeId) => {
-    return await this.ordersRepository.find({ where: { storeId: storeId } });
-  };
+  async getAllOrders(storeId) {
+    return await this.dataSource
+      .getRepository('orders')
+      .find({ where: { storeId: storeId } });
+  }
 
-  getOrderById = async (orderId) => {
-    return await this.ordersRepository.findOne({
+  async getOrderById(orderId) {
+    return await this.dataSource.getRepository('orders').findOne({
       where: { orderId: orderId },
     });
-  };
+  }
 
-  updateOrder = async (orderId, status) => {
-    const order = await this.ordersRepository.findOne({
+  async updateOrder(orderId, status) {
+    const order = await this.dataSource.getRepository('orders').findOne({
       where: { orderId: orderId },
     });
     order.status = status;
-    await this.ordersRepository.save(order);
+    await this.dataSource.getRepository('orders').save(order);
     return order;
-  };
+  }
 
-  completeOrder = async (orderId, userId) => {
-    const order = await this.ordersRepository.findOne({
+  async completeOrder(orderId, userId) {
+    const order = await this.dataSource.getRepository('orders').findOne({
       where: { orderId: orderId },
     });
-    const user = await dataSource.getRepository(Users).findOne({
+    const user = await this.dataSource.getRepository('users').findOne({
       where: { userId: userId },
     });
     user.point += order.totalPrice;
-    await dataSource.getRepository(Users).save(user);
-  };
+    await this.dataSource.getRepository('users').save(user);
+    return user.point;
+  }
 }
-
-export default OrdersRepository;
