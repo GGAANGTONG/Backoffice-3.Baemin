@@ -29,12 +29,12 @@ export class MenuService {
     return allMenu;
   };
   findMenu = async (storeId, name) => {
-    const Menu = await this.menuRepository.findOne(storeId, name);
+    const Menu = await this.menuRepository.findMenu(storeId, name);
 
     return Menu;
   };
 
-  updateMenu = async (menuId, name, price, image, category) => {
+  updateMenu = async (menuId, email, name, price, image, category) => {
     const ownersRestaurant =
       await this.restaurantService.findOwnersRestaurant(email);
 
@@ -54,7 +54,7 @@ export class MenuService {
     return updatedMenu;
   };
 
-  deleteMenu = async (menuId, name) => {
+  deleteMenu = async (email, menuId, name) => {
     const ownersRestaurant =
       await this.restaurantService.findOwnersRestaurant(email);
 

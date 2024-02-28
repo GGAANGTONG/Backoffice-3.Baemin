@@ -5,15 +5,14 @@ export class MenuController {
 
   createMenu = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
+      const { email } = res.locals.user;
       const { name, price, image, category } = req.body;
+
       if (
         name === undefined ||
         name === null ||
         price === undefined ||
         price === null ||
-        image === undefined ||
-        image === null ||
         category === undefined ||
         category === null
       ) {
@@ -46,8 +45,9 @@ export class MenuController {
   };
   findMenu = async (req, res, next) => {
     try {
-      const { storeId } = req.params;
-      const { name } = req.params;
+      // 일단 파람에 넣어둠
+      const storeId = req.params.storeId;
+      const name = req.params.name;
       if (storeId === undefined || storeId === null) {
         throw new Error('알 수 없는 오류가 발생했습니다.');
       }
@@ -55,8 +55,7 @@ export class MenuController {
       if (name === undefined || name === null) {
         throw new Error('메뉴 정보가 존재하지 않습니다.');
       }
-      const Menu = await this.menuService.findOne(storeId, name);
-
+      const Menu = await this.menuService.findMenu(storeId, name);
       return res.status(200).json({ Menu });
     } catch (error) {
       return res.status(500).json({ error });
@@ -67,7 +66,7 @@ export class MenuController {
 
   findOwnersMenu = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
+      const { email } = res.locals.user;
 
       const ownersRestaurant =
         await this.restaurantService.findOwnersRestaurant(email);
@@ -80,21 +79,21 @@ export class MenuController {
 
   updateMenu = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
+      const { email } = res.locals.user;
+      const menuId = req.params.menuId;
       const { name, price, image, category } = req.body;
       if (
         name === undefined ||
         name === null ||
         price === undefined ||
         price === null ||
-        image === undefined ||
-        image === null ||
         category === undefined ||
         category === null
       ) {
         throw new Error('등록하고 싶은 메뉴 정보를 입력해 주세요.');
       }
       const updatedMenu = await this.menuService.updateMenu(
+        menuId,
         email,
         name,
         price,
@@ -110,10 +109,15 @@ export class MenuController {
 
   deleteMenu = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
+      const { email } = res.locals.user;
+      const menuId = req.params.menuId;
       const { name } = req.body;
 
-      const deletedMenu = await this.menuService.deleteMenu(email, name);
+      const deletedMenu = await this.menuService.deleteMenu(
+        email,
+        menuId,
+        name
+      );
 
       return res.status(200).json({ deletedMenu });
     } catch (error) {

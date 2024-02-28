@@ -52,25 +52,6 @@ export class MenuRepository {
     return Menu;
   };
 
-  findOwnersMenu = async (storeId, email) => {
-    const ownersMenu = await this.dataSource.getRepository('menu').findOne({
-      where: {
-        storeId,
-        email,
-      },
-      select: {
-        name: true,
-        content: true,
-        address: true,
-        email: true,
-        phone: true,
-        rating: true,
-      },
-    });
-
-    return ownersMenu;
-  };
-
   //storeId, name, price, image, category
   updateMenu = async (storeId, menuId, name, price, image, category) => {
     const data = {
@@ -93,7 +74,7 @@ export class MenuRepository {
   };
 
   deleteMenu = async (storeId, menuId, name) => {
-    await this.dataSource.getRepository('Menu').delete({
+    await this.dataSource.getRepository('menu').delete({
       storeId,
       menuId,
       name,
