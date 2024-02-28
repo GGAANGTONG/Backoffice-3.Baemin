@@ -38,13 +38,13 @@ export class RestaurantController {
 
   findAllRestaurantByName = async (req, res, next) => {
     try {
-      const { names } = req.params;
+      const { name } = req.params;
 
-      if (names === undefined || names === null) {
+      if (name === undefined || name === null) {
         throw new Error('찾고 싶은 가게 이름을 입력해 주세요.');
       }
       const allRestaurant =
-        await this.restaurantService.findAllRestaurantByName(names);
+        await this.restaurantService.findAllRestaurantByName(name);
 
       return res.status(200).json({ allRestaurant });
     } catch (error) {

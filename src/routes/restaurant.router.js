@@ -18,7 +18,10 @@ router.post(
   authMiddleware,
   restaurantController.createRestaurant
 );
-router.get('/restaurants/:names', restaurantController.findAllRestaurantByName);
+router.get(
+  '/restaurants/specific/:name',
+  restaurantController.findAllRestaurantByName
+);
 router.get('/restaurants/:name', restaurantController.findRestaurant);
 router.put(
   '/restaurants',
