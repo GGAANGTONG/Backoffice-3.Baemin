@@ -4,48 +4,49 @@ class ReviewsService {
   }
 
   async createReview({ userId, storeId, menuId, rating, content }) {
-    return this.reviewsRepository.create({
-      userId: Number(userId),
-      storeId: Number(storeId),
-      menuId: Number(menuId), 
-      rating: Number(rating),
+    const review = this.reviewsRepository.create({
+      userId,
+      storeId,
+      menuId,
+      rating,
       content,
     });
+
+    return await this.reviewsRepository.save(review);
   }
 
   async getReviews({ storeId, orderKey = 'createdAt', orderValue = 'DESC' }) {
-    return this.reviewsRepository.findAll({
-      storeId: Number(storeId),
-      orderKey, 
-      orderValue: orderValue.toUpperCase() === 'ASC' ? 'asc' : 'desc', 
+    return await this.reviewsRepository.find({
+      where: { storeId },
+      order: { [orderKey]: orderValue },
+      relations: ['user', 'menu', 'store'], 
     });
   }
 
   async getReviewById(reviewId) {
-    return this.reviewsRepository.findById(Number(reviewId));
+    return await this.reviewsRepository.findOneBy({ id: reviewId });
   }
 
   async updateReview({ reviewId, updateData }) {
-    if (!reviewId) {
-      throw new Error('리뷰ID가 필요합니다');
-    }
-
-    const review = await this.reviewsRepository.findById(Number(reviewId));
+    const review = await this.reviewsRepository.findOneBy({ id: reviewId });
     if (!review) {
       throw new Error('리뷰 조회에 실패하였습니다.');
     }
 
-    return this.reviewsRepository.update(Number(reviewId), updateData);
+    await this.reviewsRepository.update(reviewId, updateData);
+
+    return this.getReviewById(reviewId);
   }
 
   async deleteReview(reviewId) {
-    const review = await this.reviewsRepository.findById(Number(reviewId));
+    const review = await this.reviewsRepository.findOneBy({ id: reviewId });
     if (!review) {
       throw new Error('리뷰 조회에 실패하였습니다.');
     }
 
-    return this.reviewsRepository.delete(Number(reviewId));
+    return await this.reviewsRepository.delete(reviewId);
   }
 }
 
 export default ReviewsService;
+
