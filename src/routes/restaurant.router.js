@@ -3,11 +3,12 @@ import { RestaurantRepository } from '../repositories/restaurant.repository.js';
 import { RestaurantService } from '../services/restaurant.service.js';
 import { RestaurantController } from '../controllers/restaurant.controller.js';
 import { dataSource } from '../typeorm/index.js';
+import { Like } from 'typeorm';
 
 const app = express();
 const router = express.Router();
 
-const restaurantRepository = new RestaurantRepository(dataSource);
+const restaurantRepository = new RestaurantRepository(dataSource, Like);
 const restaurantService = new RestaurantService(restaurantRepository);
 const restaurantController = new RestaurantController(restaurantService);
 

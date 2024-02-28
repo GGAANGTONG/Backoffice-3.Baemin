@@ -14,11 +14,17 @@ export class RestaurantService {
     return createdRestaurant;
   };
 
-  findAllRestaurant = async (name) => {
-    const allRestaurant =
-      await this.restaurantRepository.findAllRestaurant(name);
+  findAllRestaurant = async () => {
+    const allRestaurant = await this.restaurantRepository.findAllRestaurant();
 
     return allRestaurant;
+  };
+
+  findAllRestaurantByName = async (name) => {
+    const allRestaurantByName =
+      await this.restaurantRepository.findAllRestaurantByName(name);
+
+    return allRestaurantByName;
   };
   findRestaurant = async (name) => {
     const restaurant = await this.restaurantRepository.findRestaurant(name);
@@ -30,21 +36,18 @@ export class RestaurantService {
     const ownersRestaurant =
       await this.restaurantRepository.findOwnersRestaurant(email);
 
-    return { ownersRestaurant };
+    return ownersRestaurant;
   };
 
   updateRestaurant = async (name, content, email) => {
     const toUpdateRestaurant =
-      await this.restaurantService.findOwnersRestaurant(email);
-
+      await this.restaurantRepository.findOwnersRestaurant(email);
+    //new Error가 아니라 상속받는 error를 만들어야 함
     if (!toUpdateRestaurant) {
       throw new Error('고객님의 가게 정보가 존재하지 않습니다.');
     }
 
-    const data = {
-      content,
-    };
-    const updatedRestaurant = await this.restaurantRepository.updatedRestaurant(
+    const updatedRestaurant = await this.restaurantRepository.updateRestaurant(
       name,
       content,
       email
@@ -55,7 +58,7 @@ export class RestaurantService {
 
   deleteRestaurant = async (name, email) => {
     const toDeleteRestaurant =
-      await this.restaurantService.findOwnersRestaurant(email);
+      await this.restaurantRepository.findOwnersRestaurant(email);
 
     if (!toDeleteRestaurant) {
       throw new Error('고객님의 가게 정보가 존재하지 않습니다.');

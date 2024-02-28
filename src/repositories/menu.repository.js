@@ -16,7 +16,6 @@ export class MenuRepository {
     await this.dataSource.getRepository('menu').insert(data);
 
     return {
-      status: 201,
       message: '메뉴가 등록되었습니다.',
     };
   };
@@ -57,14 +56,6 @@ export class MenuRepository {
       where: {
         storeId,
         email,
-      },
-      select: {
-        name: true,
-        content: true,
-        address: true,
-        email: true,
-        phone: true,
-        rating: true,
       },
     });
 
