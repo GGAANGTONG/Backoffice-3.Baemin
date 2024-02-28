@@ -1,4 +1,4 @@
-class ReviewsService {
+export class ReviewsService {
   constructor(reviewsRepository) {
     this.reviewsRepository = reviewsRepository;
   }
@@ -19,7 +19,7 @@ class ReviewsService {
     return await this.reviewsRepository.find({
       where: { storeId },
       order: { [orderKey]: orderValue },
-      relations: ['user', 'menu', 'store'], 
+      relations: ['user', 'menu', 'store'],
     });
   }
 
@@ -47,6 +47,3 @@ class ReviewsService {
     return await this.reviewsRepository.delete(reviewId);
   }
 }
-
-export default ReviewsService;
-

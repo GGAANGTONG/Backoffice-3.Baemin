@@ -11,10 +11,10 @@ const restaurantRepository = new RestaurantRepository(dataSource);
 const restaurantService = new RestaurantService(restaurantRepository);
 const restaurantController = new RestaurantController(restaurantService);
 
-router.post('/', restaurantController.createRestaurant);
-router.get('/:name', restaurantController.findAllRestaurant);
-router.get('/:name', restaurantController.findRestaurant);
-router.put('/', restaurantController.updateRestaurant);
-router.delete('/', restaurantController.deleteRestaurant);
+router.post('/restaurants', restaurantController.createRestaurant);
+router.get('/restaurants/:name', restaurantController.findAllRestaurant);
+router.get('/restaurants/:name', restaurantController.findRestaurant);
+router.put('/restaurants', restaurantController.updateRestaurant);
+router.delete('/restaurants', restaurantController.deleteRestaurant);
 
 export default router;

@@ -1,5 +1,5 @@
 import express from 'express';
-import authMiddleware from '../middlewares/auth.middleware.js';
+import authMiddleware from '../../middleware/jwt-validate.middleware.js';
 import { ReviewsController } from '../controllers/reviewscontroller.js';
 import { ReviewsRepository } from '../repositories/reviewsrepository.js';
 import { ReviewsService } from '../services/reviewsservice.js';

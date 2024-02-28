@@ -5,8 +5,9 @@ export class RestaurantController {
 
   createRestaurant = async (req, res, next) => {
     try {
-      const { address, email, phone } = req.locals.user;
-      const { name, content } = req.body;
+      // phone, address req.body로 이동
+      const { email } = req.locals.user;
+      const { name, content, address, phone } = req.body;
       console.log('국밥', name);
       if (name === undefined || name === null) {
         throw new Error('등록하고 싶은 가게 정보를 입력해 주세요.');

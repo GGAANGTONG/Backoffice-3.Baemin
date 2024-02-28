@@ -1,11 +1,9 @@
 import { EntitySchema } from 'typeorm';
-
 const role = {
   user: '회원',
   owner: '식당 주인',
   admin: '관리자',
 };
-
 export const Users = new EntitySchema({
   name: 'users',
   tableName: 'users',
@@ -17,6 +15,7 @@ export const Users = new EntitySchema({
     },
     email: {
       type: 'varchar',
+      unique: true,
     },
     kakao: {
       type: 'varchar',
@@ -29,11 +28,13 @@ export const Users = new EntitySchema({
     name: {
       type: 'varchar',
     },
-    auth: {
+    verify: {
       type: 'boolean',
+      default: false,
     },
     grade: {
       type: 'varchar',
+      default: '고마운 분',
     },
     role: {
       type: 'enum',
@@ -46,6 +47,7 @@ export const Users = new EntitySchema({
     },
     createdAt: {
       type: 'datetime',
+      default: () => 'CURRENT_TIMESTAMP',
     },
     updatedAt: {
       type: 'datetime',
@@ -53,6 +55,7 @@ export const Users = new EntitySchema({
     },
     point: {
       type: 'bigint',
+      default: 0,
     },
   },
 });

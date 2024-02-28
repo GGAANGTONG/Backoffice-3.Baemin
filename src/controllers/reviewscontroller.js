@@ -1,11 +1,11 @@
-class ReviewsController {
+export class ReviewsController {
   constructor(reviewsService) {
     this.reviewsService = reviewsService;
   }
 
   async createReview(req, res, next) {
     try {
-      const { userId } = req.user; 
+      const { userId } = req.user;
       const { storeId, rating, content } = req.body;
       const review = await this.reviewsService.createReview({
         userId,
@@ -23,7 +23,7 @@ class ReviewsController {
     try {
       const { storeId } = req.query;
       const reviews = await this.reviewsService.getReviews({ storeId });
-      res.status(200).json({ data: reviews }); 
+      res.status(200).json({ data: reviews });
     } catch (error) {
       next(error);
     }
@@ -47,7 +47,9 @@ class ReviewsController {
         rating,
         content,
       });
-      res.status(200).json({ message: "리뷰가 수정되었습니다.", data: updatedReview });
+      res
+        .status(200)
+        .json({ message: '리뷰가 수정되었습니다.', data: updatedReview });
     } catch (error) {
       next(error);
     }
@@ -57,11 +59,9 @@ class ReviewsController {
     try {
       const { reviewId } = req.params;
       await this.reviewsService.deleteReview(reviewId);
-      res.status(200).json({ message: "리뷰가 삭제되었습니다." });
+      res.status(200).json({ message: '리뷰가 삭제되었습니다.' });
     } catch (error) {
       next(error);
     }
   }
 }
-
-export default ReviewsController;

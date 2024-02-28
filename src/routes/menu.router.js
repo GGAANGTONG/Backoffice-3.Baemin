@@ -14,10 +14,10 @@ const menuRepository = new MenuRepository(dataSource);
 const menuService = new MenuService(menuRepository, restaurantService);
 const menuController = new MenuController(menuService);
 
-router.post('/', menuController.createMenu);
-router.get('/:name', menuController.findAllMenu);
-router.get('/:name', menuController.findMenu);
-router.put('/', menuController.updateMenu);
-router.delete('/', menuController.deleteMenu);
+router.post('/menu', menuController.createMenu);
+router.get('/menu/:name', menuController.findAllMenu);
+router.get('/menu/:name', menuController.findMenu);
+router.put('/menu/', menuController.updateMenu);
+router.delete('/menu/', menuController.deleteMenu);
 
 export default router;

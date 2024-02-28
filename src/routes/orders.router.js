@@ -1,5 +1,5 @@
 import express from 'express';
-import authMiddleware from '../middlewares/auth.middleware.js';
+import authMiddleware from '../../middleware/jwt-validate.middleware.js';
 import { dataSource } from '../typeorm/index.js';
 import { OrdersController } from '../controllers/orders.controller.js';
 import { OrdersRepository } from '../repositories/orders.repository.js';
@@ -11,13 +11,13 @@ const ordersRepository = new OrdersRepository(dataSource);
 const ordersService = new OrdersService(ordersRepository);
 const ordersController = new OrdersController(ordersService);
 
-router.get('/', authMiddleware, (req, res) =>
+router.get('/orders', authMiddleware, (req, res) =>
   ordersController.getAllOrders(req, res)
 );
-router.get('/:orderId', authMiddleware, (req, res) =>
+router.get('/orders/:orderId', authMiddleware, (req, res) =>
   ordersController.getOrderById(req, res)
 );
-router.patch('/:orderId', authMiddleware, (req, res) =>
+router.patch('/orders/:orderId', authMiddleware, (req, res) =>
   ordersController.updateOrder(req, res)
 );
 
