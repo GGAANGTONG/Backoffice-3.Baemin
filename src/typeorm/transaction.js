@@ -12,29 +12,29 @@ import { Users } from './entities/users.entity.js';
 dotenv.config();
 
 const initializeDatabase = async () => {
-    try {
-        const connection = await createConnection({
-            type: 'mysql',
-            host: process.env.ORM_HOST,
-            port: process.env.ORM_PORT,
-            username: process.env.ORM_USERNAME,
-            password: process.env.ORM_PASSWORD,
-            database: process.env.ORM_DATABASE,
-            synchronize: false,
-            entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
-            migrations: ['src/typeorm/migrations/*.js'],
-            cli: {
-                entitiesDir: 'src/typeorm/entities',
-                migrationsDir: 'src/typeorm/migrations',
-            },
-            logging: true,
-        });
-        console.log('Database connection established');
-        return connection;
-    } catch (error) {
-        console.error('Error connecting to the database:', error);
-        throw error;
-    }
+  try {
+    const connection = await createConnection({
+      type: 'mysql',
+      host: process.env.ORM_HOST,
+      port: process.env.ORM_PORT,
+      username: process.env.ORM_USERNAME,
+      password: process.env.ORM_PASSWORD,
+      database: process.env.ORM_DATABASE,
+      synchronize: false,
+      entities: [Coupons, Menu, Orders, Point, Restaurant, Review, Users],
+      migrations: ['src/typeorm/migrations/*.js'],
+      cli: {
+        entitiesDir: 'src/typeorm/entities',
+        migrationsDir: 'src/typeorm/migrations',
+      },
+      logging: true,
+    });
+    console.log('Database connection established');
+    return connection;
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    throw error;
+  }
 };
 
 export { initializeDatabase };

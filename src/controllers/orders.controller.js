@@ -2,6 +2,38 @@ export class OrdersController {
   constructor(ordersService) {
     this.ordersService = ordersService;
   }
+  createOrder = async (req, res, next) => {
+    try {
+      const user = res.locals.user;
+      const { menuId, address } = req.body;
+
+      if (!menuId) {
+        return res
+          .status(400)
+          .json({ errorMessage: '메뉴ID가 입력되지 않았습니다.' });
+      }
+      if (!address) {
+        address = user.address;
+        if (!address) {
+          return res
+            .status(400)
+            .json({ errorMessage: '주소가 입력되지 않았습니다.' });
+        }
+      }
+      const userId = user.userId;
+
+      const newOrder = await this.ordersService.createOrder(
+        userId,
+        menuId,
+        address
+      );
+
+      return res
+        .status(200)
+        .json({ newOrder, message: '주문이 완료되었습니다.' });
+    } catch {}
+  };
+
   getAllOrders = async (req, res, next) => {
     try {
       const user = res.locals.user;

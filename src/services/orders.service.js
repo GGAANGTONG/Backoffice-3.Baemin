@@ -2,6 +2,11 @@ export class OrdersService {
   constructor(ordersRepository) {
     this.ordersRepository = ordersRepository;
   }
+
+  createOrder = async (userId, menuId, address) => {
+    return await this.ordersRepository.createOrder(userId, menuId, address);
+  };
+
   getAllOrders = async (storeId) => {
     return await this.ordersRepository.getAllOrders(storeId);
   };

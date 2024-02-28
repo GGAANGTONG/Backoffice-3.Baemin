@@ -11,6 +11,9 @@ const ordersRepository = new OrdersRepository(dataSource);
 const ordersService = new OrdersService(ordersRepository);
 const ordersController = new OrdersController(ordersService);
 
+router.post('/orders', authMiddleware, (req, res) =>
+  ordersController.createOrder(req, res)
+);
 router.get('/orders', authMiddleware, (req, res) =>
   ordersController.getAllOrders(req, res)
 );
