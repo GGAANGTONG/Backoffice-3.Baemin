@@ -47,10 +47,11 @@ export class MenuController {
   findMenu = async (req, res, next) => {
     try {
       const { storeId } = req.params;
+      const { name } = req.params;
       if (storeId === undefined || storeId === null) {
         throw new Error('알 수 없는 오류가 발생했습니다.');
       }
-      const { name } = req.query;
+      // const { name } = req.query;
       if (name === undefined || name === null) {
         throw new Error('메뉴 정보가 존재하지 않습니다.');
       }

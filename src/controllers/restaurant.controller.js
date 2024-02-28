@@ -6,7 +6,7 @@ export class RestaurantController {
   createRestaurant = async (req, res, next) => {
     try {
       // phone, address req.body로 이동
-      const { email } = req.locals.user;
+      const { email } = res.locals.user;
       const { name, content, address, phone } = req.body;
       console.log('국밥', name);
       if (name === undefined || name === null) {
@@ -30,7 +30,7 @@ export class RestaurantController {
     try {
       const allRestaurant = await this.restaurantService.findAllRestaurant();
 
-      return allRestaurant;
+      return res.status(200).json({ allRestaurant });
     } catch (error) {
       return res.status(500).json({ error: '알 수 없는 에러입니다.' });
     }
@@ -38,13 +38,13 @@ export class RestaurantController {
 
   findAllRestaurantByName = async (req, res, next) => {
     try {
-      const { name } = req.params;
+      const { names } = req.params;
 
-      if (name === undefined || name === null) {
+      if (names === undefined || names === null) {
         throw new Error('찾고 싶은 가게 이름을 입력해 주세요.');
       }
       const allRestaurant =
-        await this.restaurantService.findAllRestaurantByName(name);
+        await this.restaurantService.findAllRestaurantByName(names);
 
       return res.status(200).json({ allRestaurant });
     } catch (error) {
@@ -80,11 +80,8 @@ export class RestaurantController {
 
   updateRestaurant = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
-      const { name, content } = req.body;
-      if (name === undefined || name === null) {
-        throw new Error('업데이트 정보를 입력해 주세요.');
-      }
+      const { email } = res.locals.user;
+      const { content } = req.body;
 
       const updatedRestaurant = await this.restaurantService.updateRestaurant(
         name,
@@ -100,17 +97,10 @@ export class RestaurantController {
 
   deleteRestaurant = async (req, res, next) => {
     try {
-      const { email } = req.locals.user;
-      const { name } = req.body;
+      const { email } = res.locals.user;
 
-      if (name === undefined || name === null) {
-        throw new Error('고객님의 가게명을 입력해 주세요.');
-      }
-
-      const deletedRestaurant = await this.restaurantService.deleteRestaurant(
-        name,
-        email
-      );
+      const deletedRestaurant =
+        await this.restaurantService.deleteRestaurant(email);
 
       return res.status(200).json({ deletedRestaurant });
     } catch (error) {

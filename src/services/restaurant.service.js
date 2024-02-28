@@ -4,6 +4,12 @@ export class RestaurantService {
   }
 
   createRestaurant = async (name, content, address, email, phone) => {
+    const validationCheck =
+      await this.restaurantRepository.findOwnersRestaurant(email);
+
+    if (validationCheck) {
+      throw new Error('하나의 가게만 등록하실 수 있습니다.');
+    }
     const createdRestaurant = await this.restaurantRepository.createRestaurant(
       name,
       content,
@@ -39,7 +45,7 @@ export class RestaurantService {
     return ownersRestaurant;
   };
 
-  updateRestaurant = async (name, content, email) => {
+  updateRestaurant = async (content, email) => {
     const toUpdateRestaurant =
       await this.restaurantRepository.findOwnersRestaurant(email);
     //new Error가 아니라 상속받는 error를 만들어야 함
@@ -48,7 +54,6 @@ export class RestaurantService {
     }
 
     const updatedRestaurant = await this.restaurantRepository.updateRestaurant(
-      name,
       content,
       email
     );
@@ -56,7 +61,7 @@ export class RestaurantService {
     return updatedRestaurant;
   };
 
-  deleteRestaurant = async (name, email) => {
+  deleteRestaurant = async (email) => {
     const toDeleteRestaurant =
       await this.restaurantRepository.findOwnersRestaurant(email);
 
@@ -64,10 +69,8 @@ export class RestaurantService {
       throw new Error('고객님의 가게 정보가 존재하지 않습니다.');
     }
 
-    const deletedRestaurant = await this.restaurantRepository.deleteRestaurant(
-      name,
-      email
-    );
+    const deletedRestaurant =
+      await this.restaurantRepository.deleteRestaurant(email);
 
     return deletedRestaurant;
   };

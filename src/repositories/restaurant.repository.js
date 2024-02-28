@@ -81,13 +81,13 @@ export class RestaurantRepository {
     return ownersRestaurant;
   };
 
-  updateRestaurant = async (name, content, email) => {
+  updateRestaurant = async (content, email) => {
     const data = {
       content,
     };
+    // TODO 유효성 검사(이름 틀려도 수정됐다고함(진짜수정은안되긴함))
     await this.dataSource.getRepository('restaurant').update(
       {
-        name,
         email,
       },
       data
@@ -98,9 +98,8 @@ export class RestaurantRepository {
     };
   };
 
-  deleteRestaurant = async (name, email) => {
+  deleteRestaurant = async (email) => {
     await this.dataSource.getRepository('restaurant').delete({
-      name,
       email,
     });
 
