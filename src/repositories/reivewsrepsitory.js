@@ -1,12 +1,12 @@
 import { dataSource } from '../typeorm/index.js';
 
 class ReviewsRepository {
-  constructor(prisma) {
-    this.prisma = prisma;
+  constructor(dataSource) {
+    this.dataSource = dataSource;
   }
 
   async create({ userId, storeId, menuId, rating, content }) {
-    return this.prisma.review.create({
+    return this.dataSource.review.create({
       data: {
         userId,
         storeId,
@@ -21,7 +21,7 @@ class ReviewsRepository {
   }
 
   async findAll({ storeId, orderKey = 'createdAt', orderValue = 'desc' }) {
-    return this.prisma.review.findMany({
+    return this.dataSource.review.findMany({
       where: {
         storeId,
       },
@@ -51,7 +51,7 @@ class ReviewsRepository {
   }
 
   async findById(reviewId) {
-    return this.prisma.review.findUnique({
+    return this.dataSource.review.findUnique({
       where: { id: reviewId },
       include: {
         user: {
@@ -76,7 +76,7 @@ class ReviewsRepository {
   }
 
   async update(reviewId, data) {
-    return this.prisma.review.update({
+    return this.dataSource.review.update({
       where: { id: reviewId },
       data,
       include: {
@@ -86,7 +86,7 @@ class ReviewsRepository {
   }
 
   async delete(reviewId) {
-    return this.prisma.review.delete({
+    return this.dataSource.review.delete({
       where: { id: reviewId },
     });
   }
