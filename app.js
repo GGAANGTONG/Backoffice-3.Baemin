@@ -8,6 +8,7 @@ import restaurantRouter from './src/routes/restaurant.router.js';
 import ordersRouter from './src/routes/orders.router.js';
 import usersRouter from './src/routes/users.routes.js';
 import verifyRouter from './src/routes/verify.routes.js';
+import transactionRouter from './src/routes/transaction.routes.js';
 import { logger } from './config/winston.js';
 const app = express();
 const PORT = 3000;
@@ -26,6 +27,7 @@ app.use('/api', [
   restaurantRouter,
   menuRouter,
   reviewsRouter,
+  transactionRouter,
 ]);
 
 async function initializeApp() {
