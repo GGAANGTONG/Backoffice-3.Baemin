@@ -1,93 +1,57 @@
-// import { dataSource } from '../typeorm/index.js';
+import { Review } from '../typeorm/entities/review.entity.js'; 
 
-export class ReviewsRepository {
+export default class ReviewsRepository {
   constructor(dataSource) {
-    this.dataSource = dataSource;
+      this.repository = dataSource.getRepository(Review); 
   }
 
-  async create({ userId, storeId, menuId, rating, content }) {
-    return this.dataSource.review.create({
-      data: {
-        userId,
-        storeId,
+  async createReview({ menuId, storedId, userId, rating, content }) {
+      const review = this.repository.create({
         menuId,
+        storedId, 
+        userId,
         rating,
         content,
-      },
-      include: {
-        menu: true,
-      },
-    });
+      });
+      
+      await this.repository.save(review);
+      return review;
   }
 
-  async findAll({ storeId, orderKey = 'createdAt', orderValue = 'desc' }) {
-    return this.dataSource.review.findMany({
-      where: {
-        storeId,
-      },
-      orderBy: {
-        [orderKey]: orderValue,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-          },
-        },
-        restaurant: {
-          select: {
-            name: true,
-          },
-        },
-        menu: {
-          select: {
-            id: true,
-            name: true,
-            content: true,
-          },
-        },
-      },
-    });
+
+  async getReviews() {
+    const reviews = await this.repository.find();
+    return reviews;
   }
 
-  async findById(reviewId) {
-    return this.dataSource.review.findUnique({
-      where: { id: reviewId },
-      include: {
-        user: {
-          select: {
-            name: true,
-          },
-        },
-        restaurant: {
-          select: {
-            name: true,
-          },
-        },
-        menu: {
-          select: {
-            id: true,
-            name: true,
-            content: true,
-          },
-        },
-      },
-    });
+
+  async getReviewById(id) {
+    const review = await this.repository.findOne({ where: { reviewId: id } });
+    if (!review) {
+      throw new Error('리뷰가없습니다');
+    }
+    return review;
   }
 
-  async update(reviewId, data) {
-    return this.dataSource.review.update({
-      where: { id: reviewId },
-      data,
-      include: {
-        menu: true,
-      },
-    });
-  }
 
-  async delete(reviewId) {
-    return this.dataSource.review.delete({
-      where: { id: reviewId },
-    });
-  }
+  async updateReview(reviewId, updateData) {
+    const review = await this.repository.findOne({ where: { reviewId } });
+    if (!review) {
+        throw new Error('리뷰가없습니다');
+    }
+    Object.assign(review, updateData);
+    await this.repository.save(review);
+    return review;
 }
+
+async deleteReview(reviewId) {
+    const deleteResult = await this.repository.delete({ reviewId });
+    if (deleteResult.affected === 0) {
+        throw new Error('리뷰가없거나 이미 삭제되었습니다');
+    }
+    return deleteResult;
+}
+  
+
+}
+
