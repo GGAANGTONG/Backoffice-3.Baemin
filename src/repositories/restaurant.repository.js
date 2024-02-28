@@ -1,3 +1,4 @@
+import { Like } from 'typeorm';
 export class RestaurantRepository {
   constructor(dataSource) {
     this.dataSource = dataSource;
@@ -5,39 +6,48 @@ export class RestaurantRepository {
 
   //1. 업장 정보 생성
   createRestaurant = async (name, content, address, email, phone) => {
-    try {
-      const data = {
-        name,
-        content,
-        address,
-        email,
-        phone,
-      };
+    const data = {
+      name,
+      content,
+      address,
+      email,
+      phone,
+    };
 
-      await this.dataSource.getRepository('restaurant').insert(data);
+    await this.dataSource.getRepository('restaurant').insert(data);
 
-      return {
-        status: 201,
-        message: '가게 정보가 등록되었습니다.',
-      };
-    } catch (error) {
-      return res.status;
-    }
+    return {
+      message: '가게 정보가 등록되었습니다.',
+    };
   };
 
-  findAllRestaurant = async (name) => {
+  findAllRestaurant = async () => {
     const allRestaurant = await this.dataSource
       .getRepository('restaurant')
       .find({
-        where: {
-          name: includes(name),
-        },
         select: {
           name: true,
+          content: true,
         },
       });
 
     return allRestaurant;
+  };
+
+  findAllRestaurantByName = async (name) => {
+    const allRestaurantByName = await this.dataSource
+      .getRepository('restaurant')
+      .find({
+        where: {
+          name: Like(`%${name}%`),
+        },
+        select: {
+          name: true,
+          content: true,
+        },
+      });
+
+    return allRestaurantByName;
   };
   findRestaurant = async (name) => {
     const restaurant = await this.dataSource
@@ -66,14 +76,6 @@ export class RestaurantRepository {
         where: {
           email,
         },
-        select: {
-          name: true,
-          content: true,
-          address: true,
-          email: true,
-          phone: true,
-          rating: true,
-        },
       });
 
     return ownersRestaurant;
@@ -83,15 +85,13 @@ export class RestaurantRepository {
     const data = {
       content,
     };
-    const updatedRestaurant = await this.dataSource
-      .getRepository('restaurant')
-      .update(
-        {
-          name,
-          email,
-        },
-        data
-      );
+    await this.dataSource.getRepository('restaurant').update(
+      {
+        name,
+        email,
+      },
+      data
+    );
 
     return {
       message: '수정이 완료됐습니다.',
