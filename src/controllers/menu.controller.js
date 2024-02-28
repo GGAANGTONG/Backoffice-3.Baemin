@@ -27,7 +27,9 @@ export class MenuController {
       );
 
       return res.status(201).json({ createdMenu });
-    } catch (error) {}
+    } catch (error) {
+      return res.status(404).json({ error });
+    }
   };
 
   findAllMenu = async (req, res, next) => {

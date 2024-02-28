@@ -31,7 +31,9 @@ export class OrdersController {
       return res
         .status(200)
         .json({ newOrder, message: '주문이 완료되었습니다.' });
-    } catch {}
+    } catch (error) {
+      next(error);
+    }
   };
 
   getAllOrders = async (req, res, next) => {
