@@ -2,93 +2,43 @@ import { dataSource } from '../typeorm/index.js';
 
 class ReviewsRepository {
   constructor(dataSource) {
-    this.dataSource = dataSource;
+    this.repository = dataSource.getRepository(Review);
   }
 
   async create({ userId, storeId, menuId, rating, content }) {
-    return this.dataSource.review.create({
-      data: {
-        userId,
-        storeId,
-        menuId,
-        rating,
-        content,
-      },
-      include: {
-        menu: true, 
-      },
+    const review = this.repository.create({
+      userId,
+      storeId, 
+      menuId,
+      rating,
+      content,
     });
+    
+    return await this.repository.save(review);
   }
 
-  async findAll({ storeId, orderKey = 'createdAt', orderValue = 'desc' }) {
-    return this.dataSource.review.findMany({
-      where: {
-        storeId,
-      },
-      orderBy: {
-        [orderKey]: orderValue,
-      },
-      include: {
-        user: {
-          select: {
-            name: true
-          },
-        },
-        restaurant: {
-          select: {
-            name: true
-          },
-        },
-        menu: {
-          select: {
-            id: true,
-            name: true,
-            content: true, 
-          },
-        },
-      },
+  async findAll({ storeId, orderKey = 'createdAt', orderValue = 'DESC' }) {
+    return await this.repository.find({
+      where: { storeId },
+      order: { [orderKey]: orderValue.toUpperCase() }, 
+      relations: ['user', 'restaurant', 'menu'],
     });
   }
 
   async findById(reviewId) {
-    return this.dataSource.review.findUnique({
+    return await this.repository.findOne({
       where: { id: reviewId },
-      include: {
-        user: {
-          select: {
-            name: true
-          },
-        },
-        restaurant: {
-          select: {
-            name: true
-          },
-        },
-        menu: {
-          select: {
-            id: true,
-            name: true,
-            content: true, 
-          },
-        },
-      },
+      relations: ['user', 'restaurant', 'menu'],
     });
   }
 
   async update(reviewId, data) {
-    return this.dataSource.review.update({
-      where: { id: reviewId },
-      data,
-      include: {
-        menu: true,
-      },
-    });
+    await this.repository.update(reviewId, data);
+    return this.findById(reviewId); 
   }
 
   async delete(reviewId) {
-    return this.dataSource.review.delete({
-      where: { id: reviewId },
-    });
+    return await this.repository.delete(reviewId);
   }
 }
 

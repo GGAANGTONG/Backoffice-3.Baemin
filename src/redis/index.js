@@ -17,4 +17,3 @@ if (process.env.NODE_ENV === 'test') {
         ttl: 60 * 1000 // milliseconds
     });
 }
-
