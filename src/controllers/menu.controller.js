@@ -66,6 +66,17 @@ export class MenuController {
     }
   };
 
+getRestaurantsByCategory = async (req, res) => {
+    try {
+      const category = req.params.category;
+      console.log(1,category);
+      const restaurants = await this.menuService.getRestaurantsByCategory(category);
+     return res.json({restaurants});
+    } catch (error) {
+     return res.status(500).send(error.message);
+    }
+  };
+
   findOwnersMenu = async (req, res, next) => {
     try {
       const { email } = res.locals.user;
