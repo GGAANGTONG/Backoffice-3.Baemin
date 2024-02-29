@@ -18,6 +18,7 @@ const menuController = new MenuController(menuService);
 router.post('/menu', authMiddleware, menuController.createMenu);
 router.get('/menu/:storeId', menuController.findAllMenu);
 router.get('/menu/:storeId/:name', menuController.findMenu);
+router.get('/restaurants/category/:category', menuController.getRestaurantsByCategory);
 router.put('/menu/:menuId', authMiddleware, menuController.updateMenu);
 router.delete('/menu/:menuId', authMiddleware, menuController.deleteMenu);
 
