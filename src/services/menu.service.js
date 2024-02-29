@@ -35,6 +35,12 @@ export class MenuService {
     return Menu;
   };
 
+    getRestaurantsByCategory = async (category) => {
+    const restaurnatbyCategory = await this.menuRepository.findRestaurantsByCategory(category);
+
+  return restaurnatbyCategory;
+};
+
   updateMenu = async (menuId, email, name, price, image, category) => {
     const ownersRestaurant =
       await this.restaurantService.findOwnersRestaurant(email);
