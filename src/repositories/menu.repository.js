@@ -52,6 +52,13 @@ export class MenuRepository {
     return Menu;
   };
 
+findRestaurantsByCategory = async (category) => {
+    const restaurnatbyCategory = await this.dataSource.getRepository('menu').find({
+     where: { category }
+   });
+   return restaurnatbyCategory
+ };
+
   //storeId, name, price, image, category
   updateMenu = async (storeId, menuId, name, price, image, category) => {
     const data = {
