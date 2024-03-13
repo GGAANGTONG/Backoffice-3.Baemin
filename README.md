@@ -42,6 +42,6 @@ ss
 - REDIS_HOST
 - REDIS_PORT
 ✒ API 명세서 URL
-- https://www.notion.so/teamsparta/4b2aaadab8bb473a913e14b9b2729f12?v=3a5d055d281d4d28a4b13a9c27a71ac2
+- https://teamsparta.notion.site/3afc91c1f0de4b589963d760a1edd66a
 🔧 ERD URL
-- https://drawsql.app/teams/-901/diagrams/-3
+- https://www.erdcloud.com/d/XCN4hEXD35keo47px
