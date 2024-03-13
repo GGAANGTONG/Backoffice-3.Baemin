@@ -41,7 +41,7 @@ ss
 - REDIS_PASSWORD
 - REDIS_HOST
 - REDIS_PORT
-### ✒ API 명세서 URL
+### **✒ API 명세서 URL**
 - https://teamsparta.notion.site/3afc91c1f0de4b589963d760a1edd66a
-### 🔧 ERD URL
+### **🔧 ERD URL**
 - https://www.erdcloud.com/d/XCN4hEXD35keo47px
