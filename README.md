@@ -1,3 +1,5 @@
+![group_3_720](https://github.com/Node-4th/Backoffice-3.Baemin/assets/91053150/f501c129-d32b-49ad-82cc-eedbcf39a2af)
+
 # **배달의 민족🛵** #
 ✨ 프로젝트 소개
 음식 배달 주문 사이트.
